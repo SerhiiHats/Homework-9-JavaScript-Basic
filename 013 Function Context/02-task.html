@@ -6,9 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task 02</title>
+    <style>
+        button {
+            width: 100px;
+            padding: 5px;
+            margin: 10px;
+        }
+    </style>
 </head>
 
 <body>
+    <p>вариант с setInterval</p>
+    <button class="stop">stop</button>
+    <span class="show-model"></span><br>
+    <button class="go">go</button>
+    <p>вариант с setTimeout</p>
+    <button class="stopTime">stop</button>
+    <span class="showTime"></span>
+    <br>
+    <button class="goTime">go</button>
+
     <script>
         /*
         Задание:
@@ -16,6 +33,75 @@
         Метод принимает массив и на консоль по очереди выводит каждый элемент массива с интервалом в одну секунду
         Сделайте два варианта с setInterval и setTimeout
         */
+        let array = ["Audi", "BMW", "Chevrolet", "Ford", "Honda", "Hyunday", "Kia", "Lexus", "Mazda", "Mercedes-Benz"];
+        let color = ["red", "orange", "yellow", "green", "gold", "blue", "viole", "brown", "greenyellow", "coralcoral"]
+        let timerId;
+        let timerIdTime;
+        let i = 0;
+        let k = 0;
+        let elementShow = document.querySelector(".show-model");
+        let elementStop = document.querySelector(".stop");
+        let elementGo = document.querySelector(".go");
+        let elementShowTime = document.querySelector(".showTime");
+        let elementStopTime = document.querySelector(".stopTime");
+        let elementGoTime = document.querySelector(".goTime");
+        let elemPFirst = document.querySelector("body p:nth-child(1)");
+        let elemPSecond = document.querySelector("body p:nth-child(6)");
+
+
+
+        function showWithDelay(array, startTime) {
+            let strShow = `'${array[i]}'=array[${i}] вышел с заддержкой в ${new Date() - startTime}мс.`;
+            elementShow.textContent = strShow;
+            console.log(strShow);
+            timerId && i++
+            i = (i === array.length) ? 0 : i;
+            elemPFirst.style.color = color[i];
+        }
+
+        function showWithTime(array, startTime) {
+            let strShowTime = `'${array[k]}'=array[${k}] вышел с заддержкой в ${new Date() - startTime}мс.`;
+            elementShowTime.textContent = strShowTime;
+            timerIdTime && k++
+            k = (k === array.length) ? 0 : k;
+            elemPSecond.style.color = color[k];
+            timerIdTime = setTimeout(showWithTime, 1000, array, startTimeOut);
+        }
+
+
+        let startTime = new Date();
+        if (!timerId) {
+            timerId = setInterval(showWithDelay, 1000, array, startTime);
+        }
+
+        let startTimeOut = new Date();
+        if (!timerIdTime) {
+            timerIdTime = setTimeout(showWithTime, 1000, array, startTimeOut);
+        }
+
+
+
+        elementStop.addEventListener("click", () => {
+            timerId = clearInterval(timerId);
+        });
+
+        elementGo.addEventListener("click", () => {
+            if (!timerId) {
+                let startTime = new Date();
+                timerId = setInterval(showWithDelay, 1000, array, startTime);
+            }
+        });
+
+        elementStopTime.addEventListener("click", () => {
+            timerIdTime = clearTimeout(timerIdTime);
+        })
+
+        elementGoTime.addEventListener("click", () => {
+            let startTimeOut = new Date();
+            if (!timerIdTime) {
+                timerIdTime = setTimeout(showWithTime, 1000, array, startTimeOut);
+            }
+        })
     </script>
 </body>
 
