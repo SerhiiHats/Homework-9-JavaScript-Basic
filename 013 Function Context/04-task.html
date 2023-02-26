@@ -96,7 +96,7 @@
         showNotCompletedButton.addEventListener("click", showNotCompletedHandler);
 
         taskNameInput.addEventListener("keydown", function (e) {
-            if (e.code == "Enter") addTaskHandler();
+            if (e.code === "Enter") addTaskHandler();
         })
 
         function addTaskHandler() {
@@ -123,7 +123,7 @@
         function showNotCompletedHandler() {
             taskList.innerHTML = "";
             tasks
-                .filter(task => task.isDone == false)
+                .filter(task => task.isDone === false)
                 .forEach(task => {
                     task.createIn(taskList);
                 });
@@ -141,9 +141,9 @@
                 this.div.classList.add("task");
 
                 let input = document.createElement("input");
-                input.addEventListener("click", this.changeState);
+                // input.addEventListener("click", this.changeState);
+                input.addEventListener("click", this.changeState.bind(this));
                 input.type = "checkbox";
-
                 let p = document.createElement("p");
                 p.innerText = this.text;
 
