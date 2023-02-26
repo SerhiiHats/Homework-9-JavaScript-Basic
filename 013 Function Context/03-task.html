@@ -2,50 +2,58 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task 03</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 03</title>
 </head>
 
 <body>
-    <script>
-        /*
-        Задание:
-        Найдите и исправьте проблему в методах getGreaterThanThreshold и getLessThanThreshold
-        */
+<script>
+    /*
+    Задание:
+    Найдите и исправьте проблему в методах getGreaterThanThreshold и getLessThanThreshold
+    */
 
-        class Numbers {
-            #values;
-            #threshold;
+    class Numbers {
+        #values;
+        #threshold;
 
-            constructor(threshold, values) {
-                this.#values = values;
-                this.#threshold = threshold;
-            }
-
-            // Возвращает все значения из массива values, которые больше, чем значение переменной threshold
-            getGreaterThanThreshold() {
-                return this.#values.filter(function (v) {
-                    return v > this.#threshold;
-                })
-            }
-
-            // возвращает все значения из массива values, которые меньше, чем значение переменной threshold 
-            getLessThanThreshold() {
-                return this.#values.filter(function (v) {
-                    return v < this.#threshold;
-                })
-            }
+        constructor(threshold, values) {
+            this.#values = values;
+            this.#threshold = threshold;
         }
 
-        let numbers = new Numbers(50, [10, 20, 23, 11, 5, 6, 90, 33, 45, 67]);
-        let gt = numbers.getGreaterThanThreshold();
-        let lt = numbers.getLessThanThreshold();
+        // Возвращает все значения из массива values, которые больше, чем значение переменной threshold
+        getGreaterThanThreshold() {
+            let threshold = this.#threshold;
+            return this.#values.filter(function (v) {                     //потеря контекст и лечение
+                return v > threshold;                                     //1-й вариант передаем переменную по значению
+            });
+        }
 
-        console.log(gt);
-        console.log(lt);
-    </script>
+        // возвращает все значения из массива values, которые равны значению переменной threshold
+        getEqualThreshold() {
+            return this.#values.filter(function (v) {
+                return v === this.#threshold;                               //потеря контекст и лечение
+            }.bind(this));                                                //2-й вариант привязываем контекст - возвращаем функцию с нашим контекстом .bind(this)
+        }
+
+        // возвращает все значения из массива values, которые меньше, чем значение переменной threshold
+        getLessThanThreshold() {                                         //потеря контекст и лечение
+            return this.#values.filter((v) => v < this.#threshold);      //3-й вариант используем стрелочные функции - они теряют свой контекст из которого были вызваны
+        }                                                                //поэтому в итоге мы получим контекст класса в котором ее используем
+    }
+
+    let numbers = new Numbers(50, [10, 50, 20, 23, 50, 11, 5, 6, 90, 33, 45, 50, 67]);
+    let gt = numbers.getGreaterThanThreshold();
+    let eql = numbers.getEqualThreshold();
+    let lt = numbers.getLessThanThreshold();
+
+    console.log(gt);
+    console.log(eql);
+    console.log(lt);
+</script>
 </body>
 
 </html>
