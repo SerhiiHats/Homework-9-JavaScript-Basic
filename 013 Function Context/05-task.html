@@ -2,36 +2,190 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task 05</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 05</title>
+  <style>
+      .container {
+          width: 700px;
+          background: lightgray;
+          margin: auto;
+          display: flex;
+          justify-content: space-between;
+      }
+
+      nav {
+          width: 20%;
+          border: 1px solid red;
+          padding: 5px;
+      }
+
+      .panel {
+          width: 47%;
+          border: 1px solid red;
+      }
+
+      aside {
+          width: 26%;
+          border: 1px solid red;
+      }
+
+      .row-panel {
+          display: flex;
+          justify-content: center;
+          margin: 15px 0;
+      }
+
+      #btn-answer {
+          margin-left: 5px;
+      }
+
+      #time {
+          color: #03a403;
+          font-weight: bold;
+          margin-left: 5px;
+      }
+
+      #score {
+          color: red;
+          font-weight: bold;
+          margin-left: 11px;
+      }
+
+      .row-asside {
+          margin: 5px 0;
+      }
+  </style>
 </head>
 
 <body>
-    <script>
-        /*
-        Задание:
-        Напишите сценарии "Игра 'Угадай число'". Суть игры - угадать за меньшее количество попыток число, которое загадал сценарий.
-        Каждый раз, когда игрок пытается угадать число, сценарий выводит подсказку - меньшее или большее число было загадано сценарием.
-        Сценарий загадывает число только один раз в начале игры и это число не меняется до завершения игры.
-        При завершении игры выведите пользователю информацию о том, с какой попытки угадано значение и сколько было потрачено на это времени.
+<div class="container">
+  <nav>
+    <button id="btn-begin">Начать</button>
+  </nav>
+  <div class="panel">
+    <h1>Игра: Угадай число</h1>
+    <div class="row-panel">
+      <input type="number" name="answer" id="answer">
+      <button id="btn-answer">Ответить</button>
+    </div>
+    <div class="row-panel clue">
+      случайное число от 0 до 100, нажмите:[начать]
+    </div>
+  </div>
+  <aside>
+    <div class="row-asside">
+      <span>Время:</span><span id="time">00:45</span>
+    </div>
+    <div class="row-asside">
+      <span>Score:</span><span id="score">5</span>
+    </div>
+    <p>Время:</p>
+    <p>Попыток:</p>
+  </aside>
 
-        Для генерации случайного числа используйте следующий код:
-        let randomValue = Math.floor(Math.random() * 101); // случайное значение от 0 до 100 будет записано в переменную randomValue
-        
-        Пример игры:
-        Сценарий: я загадал случайное значение от 0 до 100
-        Пользователь: 50
-        Сценарий: я загадал значение больше, чем 50
-        Пользователь: 75
-        Сценарий: я загадал значение меньше, чем 75
-        Пользователь: 62
-        Сценарий: я загадал значение меньше, чем 62
-        Пользователь: 56
-        Сценарий: Правильно! Загаданное значение 56. Вы угадали с 4й попытки за 10 сек.
-        */
-    </script>
+</div>
+
+
+<script>
+    /*
+    Задание:
+    Напишите сценарии "Игра 'Угадай число'". Суть игры - угадать за меньшее количество попыток число, которое загадал сценарий.
+    Каждый раз, когда игрок пытается угадать число, сценарий выводит подсказку - меньшее или большее число было загадано сценарием.
+    Сценарий загадывает число только один раз в начале игры и это число не меняется до завершения игры.
+    При завершении игры выведите пользователю информацию о том, с какой попытки угадано значение и сколько было потрачено на это времени.
+
+    Для генерации случайного числа используйте следующий код:
+    let randomValue = Math.floor(Math.random() * 101); // случайное значение от 0 до 100 будет записано в переменную randomValue
+
+    Пример игры:
+    Сценарий: я загадал случайное значение от 0 до 100
+    Пользователь: 50
+    Сценарий: я загадал значение больше, чем 50
+    Пользователь: 75
+    Сценарий: я загадал значение меньше, чем 75
+    Пользователь: 62
+    Сценарий: я загадал значение меньше, чем 62
+    Пользователь: 56
+    Сценарий: Правильно! Загаданное значение 56. Вы угадали с 4й попытки за 10 сек.
+    */
+    class Game {
+        #randomValue = "";
+        #startTime = "";
+        #count = 0;
+
+        constructor() {
+            this.#randomValue = Math.floor(Math.random() * 101);
+            this.#startTime = new Date();
+        }
+
+        getAnswer(value) {
+            this.#count++;
+            if (value > this.#randomValue) {
+                return "вывожу подсказку - мое число меньше";
+            } else if (value < this.#randomValue) {
+                return "вывожу подсказку - мое число больше";
+            } else {
+                return "Вы угадали!";
+            }
+        }
+
+        get startTime() {
+            return this.#startTime;
+        }
+
+        get count() {
+            return this.#count;
+        }
+    }
+
+    class Panel {
+        #game = "";
+        #elementClue = document.querySelector(".clue");
+
+        constructor() {
+        }
+
+        startGame() {
+            if (!this.#game) {
+                this.#game = new Game();
+                // this.#game = new Panel();
+                // document.querySelector(".clue").textContent = "Начали: введите число"
+                this.#elementClue.textContent = "Начали: введите число"
+            }
+        }
+
+        getClue(answer) {
+let clue = this.#game.getAnswer(answer);
+console.log(clue)
+            this.#elementClue.textContent = clue;
+        }
+
+    }
+
+    let panel = new Panel();
+    let elemAnswer = document.querySelector("#answer");
+    let btnAnswer = document.querySelector("#btn-answer");
+
+
+    document.querySelector("#btn-begin").addEventListener("click", panel.startGame.bind(panel));
+    // document.querySelector("#btn-begin").addEventListener("click", ()=>{
+    //     panel.startGame();
+    // });
+
+    btnAnswer.addEventListener("click", () => {
+        let textAnswer = Number(elemAnswer.value);
+        console.log(textAnswer);
+        console.log(typeof (textAnswer));
+        elemAnswer.value = "";
+        panel.getClue(textAnswer);
+
+
+    });
+
+
+</script>
 </body>
 
 </html>
