@@ -2,94 +2,120 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task 05</title>
-  <style>
-      .container {
-          width: 700px;
-          background: lightgray;
-          margin: auto;
-          display: flex;
-          justify-content: space-between;
-      }
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 05</title>
+    <style>
+        .container {
+            width: 700px;
+            background: rgb(230, 229, 229);
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 0 9px 3px gray;
+        }
 
-      nav {
-          width: 20%;
-          border: 1px solid red;
-          padding: 5px;
-      }
+        nav {
+            width: 20%;
+            padding: 5px;
+        }
 
-      .panel {
-          width: 47%;
-          border: 1px solid red;
-      }
+        .panel {
+            width: 47%;
+        }
 
-      aside {
-          width: 26%;
-          border: 1px solid red;
-      }
+        aside {
+            width: 20%;
+            border: 1px solid gray;
+            padding-left: 20px;
+            margin: 7px;
+        }
 
-      .row-panel {
-          display: flex;
-          justify-content: center;
-          margin: 15px 0;
-      }
 
-      #btn-answer {
-          margin-left: 5px;
-      }
+        .row-panel {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
 
-      #time {
-          color: #03a403;
-          font-weight: bold;
-          margin-left: 5px;
-      }
+        #btn-answer {
+            margin-left: 5px;
+        }
 
-      #score {
-          color: red;
-          font-weight: bold;
-          margin-left: 11px;
-      }
+        #btn-begin {
+            padding: 5px 15px;
+        }
 
-      .row-asside {
-          margin: 5px 0;
-      }
-  </style>
+        #time {
+            color: #03a403;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        #score {
+            color: red;
+            font-weight: bold;
+            margin-left: 11px;
+        }
+
+        .best-time {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .best-count {
+            font-weight: bold;
+            margin-left: 11px;
+        }
+
+        .row-asside {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 
 <body>
-<div class="container">
-  <nav>
-    <button id="btn-begin">Начать</button>
-  </nav>
-  <div class="panel">
-    <h1>Игра: Угадай число</h1>
-    <div class="row-panel">
-      <input type="number" name="answer" id="answer">
-      <button id="btn-answer">Ответить</button>
-    </div>
-    <div class="row-panel clue">
-      случайное число от 0 до 100, нажмите:[начать]
-    </div>
-  </div>
-  <aside>
-    <div class="row-asside">
-      <span>Время:</span><span id="time">00:45</span>
-    </div>
-    <div class="row-asside">
-      <span>Score:</span><span id="score">5</span>
-    </div>
-    <p>Время:</p>
-    <p>Попыток:</p>
-  </aside>
+    <div class="container">
+        <nav>
+            <button id="btn-begin">Начать</button>
+        </nav>
+        <div class="panel">
+            <h1>Игра: Угадай число</h1>
+            <div class="row-panel">
+                <input type="number" name="answer" id="answer">
+                <button id="btn-answer">Ответить</button>
+            </div>
+            <div class="row-panel clue">
+                случайное число от 0 до 100, нажмите:[начать]
+            </div>
+        </div>
+        <aside>
+            <div class="row-asside">
+                <span>Время:</span><span id="time">00:00</span>
+            </div>
+            <div class="row-asside">
+                <span>Score:</span><span id="score">0</span>
+            </div>
+            <div class="row-asside">
+                <p>Мои рекорды:</p>
+            </div>
+            <div class="row-asside">
+                <p>Время: <span class="best-time"></span></p>
+            </div>
+            <div class="row-asside">
+                <p>Score: <span class="best-count"></span></p>
+            </div>
 
-</div>
 
 
-<script>
-    /*
+        </aside>
+
+    </div>
+
+
+    <script>
+        /*
     Задание:
     Напишите сценарии "Игра 'Угадай число'". Суть игры - угадать за меньшее количество попыток число, которое загадал сценарий.
     Каждый раз, когда игрок пытается угадать число, сценарий выводит подсказку - меньшее или большее число было загадано сценарием.
@@ -110,82 +136,115 @@
     Пользователь: 56
     Сценарий: Правильно! Загаданное значение 56. Вы угадали с 4й попытки за 10 сек.
     */
-    class Game {
-        #randomValue = "";
-        #startTime = "";
-        #count = 0;
+        class Game {
+            #randomValue = "";
+            #startTime = "";
+            #count = 0;
 
-        constructor() {
-            this.#randomValue = Math.floor(Math.random() * 101);
-            this.#startTime = new Date();
-        }
+            constructor() {
+                this.#randomValue = Math.floor(Math.random() * 101);
+                this.#startTime = new Date();
+            }
 
-        getAnswer(value) {
-            this.#count++;
-            if (value > this.#randomValue) {
-                return "вывожу подсказку - мое число меньше";
-            } else if (value < this.#randomValue) {
-                return "вывожу подсказку - мое число больше";
-            } else {
-                return "Вы угадали!";
+            getAnswer(value) {
+                this.#count++;
+                if (value > this.#randomValue) {
+                    return "вывожу подсказку - мое число меньше";
+                } else if (value < this.#randomValue) {
+                    return "вывожу подсказку - мое число больше";
+                } else {
+                    return "Вы угадали!";
+                }
+            }
+
+            get startTime() {
+                return this.#startTime;
+            }
+
+            get count() {
+                return this.#count;
+            }
+
+            getPassedTime() {
+                let nowTime = new Date();
+                let deltaTime = Math.floor((nowTime - this.#startTime) / 1000);
+                let minute = (Math.floor(deltaTime / 60) < 10) ? "0" + Math.floor(deltaTime / 60) : Math.floor(
+                    deltaTime / 60);
+                let second = (deltaTime % 60 < 10) ? "0" + deltaTime % 60 : deltaTime % 60;
+                return `${minute}:${second}`;
             }
         }
 
-        get startTime() {
-            return this.#startTime;
-        }
+        class Panel {
+            #game = "";
+            #elementClue = document.querySelector(".clue");
+            #elemAnswer = document.querySelector("#answer");
+            #elemTime = document.querySelector("#time");
+            #elemScore = document.querySelector("#score");
+            #timeId = "";
+            #minCount = 0;
+            #minTime = "00:00";
 
-        get count() {
-            return this.#count;
-        }
-    }
+            constructor() {}
 
-    class Panel {
-        #game = "";
-        #elementClue = document.querySelector(".clue");
+            startGame() {
+                if (!this.#game & !this.#timeId) {
+                    this.#game = new Game();
+                    this.#elementClue.textContent = "Начали: введите число"
+                    this.#elemAnswer.value = "";
+                    this.#elemTime.textContent = "00:00";
+                    this.#elemScore.textContent = 0;
+                    this.#timeId = setInterval(() => {
+                        this.#elemTime.textContent = this.#game.getPassedTime()
+                    }, 1000);
+                } else {
+                    this.#gameOver();
+                }
+            }
 
-        constructor() {
-        }
+            getClue() {
+                if (!this.#game) {
+                    return;
+                }
+                let textAnswer = Number(this.#elemAnswer.value);
+                this.#elemAnswer.value = "";
+                let clue = this.#game.getAnswer(textAnswer);
+                this.#elementClue.textContent = clue;
+                this.#elemScore.textContent = this.#game.count;
+                if (clue === "Вы угадали!") {
+                    this.#gameOver();
+                }
+            }
 
-        startGame() {
-            if (!this.#game) {
-                this.#game = new Game();
-                // this.#game = new Panel();
-                // document.querySelector(".clue").textContent = "Начали: введите число"
-                this.#elementClue.textContent = "Начали: введите число"
+            #gameOver() {
+                if (this.#minCount === 0) {
+                    this.#minCount = this.#game.count;
+                } else {
+                    this.#minCount = (this.#game.count < this.#minCount) ? this.#game.count : this.#minCount;
+                }
+
+                if (this.#minTime === "00:00") {
+                    this.#minTime = this.#elemTime.textContent;
+                } else {
+                    let deltaTime = Number(this.#elemTime.textContent.replace(":", "")) - Number(this.#minTime
+                        .replace(":", ""));
+                    this.#minTime = (deltaTime < 0) ? this.#elemTime.textContent : this.#minTime;
+                }
+                document.querySelector(".best-time").textContent = this.#minTime;
+                document.querySelector(".best-count").textContent = this.#minCount;
+                this.#timeId = clearInterval(this.#timeId);
+                this.#game = null;
             }
         }
 
-        getClue(answer) {
-let clue = this.#game.getAnswer(answer);
-console.log(clue)
-            this.#elementClue.textContent = clue;
-        }
+        let panel = new Panel();
+        let btnAnswer = document.querySelector("#btn-answer");
 
-    }
-
-    let panel = new Panel();
-    let elemAnswer = document.querySelector("#answer");
-    let btnAnswer = document.querySelector("#btn-answer");
-
-
-    document.querySelector("#btn-begin").addEventListener("click", panel.startGame.bind(panel));
-    // document.querySelector("#btn-begin").addEventListener("click", ()=>{
-    //     panel.startGame();
-    // });
-
-    btnAnswer.addEventListener("click", () => {
-        let textAnswer = Number(elemAnswer.value);
-        console.log(textAnswer);
-        console.log(typeof (textAnswer));
-        elemAnswer.value = "";
-        panel.getClue(textAnswer);
-
-
-    });
-
-
-</script>
+        document.querySelector("#btn-begin").addEventListener("click", panel.startGame.bind(panel));
+        btnAnswer.addEventListener("click", () => {
+            panel.getClue();
+        });
+    </script>
 </body>
 
 </html>
