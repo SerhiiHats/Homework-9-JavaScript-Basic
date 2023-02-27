@@ -169,11 +169,10 @@
             }
 
             getPassedTime() {
-                let nowTime = new Date();
-                let deltaTime = Math.floor((nowTime - this.#startTime) / 1000);
-                let minute = (Math.floor(deltaTime / 60) < 10) ? "0" + Math.floor(deltaTime / 60) : Math.floor(
-                    deltaTime / 60);
-                let second = (deltaTime % 60 < 10) ? "0" + deltaTime % 60 : deltaTime % 60;
+                let mlSeconds = new Date() - this.#startTime;
+                let timePassed = new Date(0, 0, 0, 0, 0, 0, mlSeconds);
+                let minute = (timePassed.getMinutes()) < 10 ? "0" + timePassed.getMinutes() : timePassed.getMinutes();
+                let second = (timePassed.getSeconds() < 10) ? "0" + timePassed.getSeconds() : timePassed.getSeconds();
                 return `${minute}:${second}`;
             }
         }
@@ -198,6 +197,7 @@
                     this.#elemTime.textContent = "00:00";
                     this.#elemScore.textContent = 0;
                     this.#timeId = setInterval(() => {
+                        this.#game.getPassedTime() === "59:59" && this.#gameOver();
                         this.#elemTime.textContent = this.#game.getPassedTime()
                     }, 1000);
                 } else {
@@ -233,8 +233,9 @@
                         .replace(":", ""));
                     this.#minTime = (deltaTime < 0) ? this.#elemTime.textContent : this.#minTime;
                 }
-                document.querySelector(".best-time").textContent = this.#minTime;
                 document.querySelector(".best-count").textContent = this.#minCount;
+                document.querySelector(".best-time").textContent = this.#minTime;
+
                 this.#timeId = clearInterval(this.#timeId);
                 this.#game = null;
             }
@@ -245,8 +246,8 @@
         let elemContainer = document.querySelector(".container");
 
         document.querySelector("#btn-begin").addEventListener("click", panel.startGame.bind(panel));
-        btnAnswer.addEventListener("click", () => { 
-            panel.getClue(); 
+        btnAnswer.addEventListener("click", () => {
+            panel.getClue();
         });
         elemContainer.addEventListener("keydown", (e) => {
             e.key === "Enter" && panel.getClue();
